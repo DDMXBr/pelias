@@ -35,6 +35,12 @@
     "adminLookup": {
       "enabled": true
     },
+    "csv": {
+      "datapath": "/data/csv",
+      "files": [],
+      "download": [
+      ]
+    },
     "geonames": {
       "datapath": "/data/geonames",
       "countryCode": "US"
@@ -1833,6 +1839,8 @@
     "whosonfirst": {
       "datapath": "/data/whosonfirst",
       "importPostalcodes": true,
+      "countryCode": ["AI", "AG", "AW", "BS", "BB", "BZ", "BM", "BQ", "BO", "VG", "KY", "CA",
+        "CR", "CU", "CW", "DM", "DO", "SV", "GD", "GL", "GT", "HT", "HN", "JM", "MQ", "MS", "NI", "VE", "PA", "PR", "BL", "KN", "LC", "PM", "VC", "SX", "MF", "MX", "TT", "TC", "US", "VI"],
       "importPlace": "102191575"
     },
     "interpolation": {

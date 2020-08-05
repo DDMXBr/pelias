@@ -1,3 +1,26 @@
+<p align="center">
+  <img height="100" src="https://raw.githubusercontent.com/pelias/design/master/logo/pelias_github/Github_markdown_hero.png">
+</p>
+<h3 align="center">A modular, open-source search engine for our world.</h3>
+<p align="center">Pelias is a geocoder powered completely by open data, available freely to everyone.</p>
+<p align="center">
+<a href="https://en.wikipedia.org/wiki/MIT_License"><img src="https://img.shields.io/github/license/pelias/api?style=flat&color=orange" /></a>
+<a href="https://hub.docker.com/u/pelias"><img src="https://img.shields.io/docker/pulls/pelias/api?style=flat&color=informational" /></a>
+<a href="https://gitter.im/pelias/pelias"><img src="https://img.shields.io/gitter/room/pelias/pelias?style=flat&color=yellow" /></a>
+</p>
+<p align="center">
+	<a href="https://github.com/pelias/docker">Local Installation</a> ·
+        <a href="https://geocode.earth">Cloud Webservice</a> ·
+	<a href="https://github.com/pelias/documentation">Documentation</a> ·
+	<a href="https://gitter.im/pelias/pelias">Community Chat</a>
+</p>
+<details open>
+<summary>What is Pelias?</summary>
+<br />
+Pelias is a search engine for places worldwide, powered by open data. It turns addresses and place names into geographic coordinates, and turns geographic coordinates into places and addresses. With Pelias, you’re able to turn your users’ place searches into actionable geodata and transform your geodata into real places.
+<br /><br />
+We think open data, open source, and open strategy win over proprietary solutions at any part of the stack and we want to ensure the services we offer are in line with that vision. We believe that an open geocoder improves over the long-term only if the community can incorporate truly representative local knowledge.
+</details>
 
 # Pelias in Docker
 
@@ -17,6 +40,11 @@ You will need to have a [modern version of `docker`](https://docs.docker.com/eng
 
 This project supports Linux and Mac OSX operatings systems. Windows is currently [not supported](https://github.com/pelias/docker/issues/124).
 
+## Requirements for Linux
+- Install `util-linux` using your distribution's package manager
+  - Alpine Linux: `sudo apk add util-linux`
+  - Debian/Ubuntu: `sudo apt-get install util-linux` 
+
 ## Requirements for Mac OSX
 - install GNU coreutils with [Homebrew](https://brew.sh/): `brew install coreutils`.
 - Max-out Docker computing resources( `Memory-RAM and CPUs-Cores` ) dedicated to Docker in `Docker > Preferences > Advanced`.
@@ -31,32 +59,34 @@ At least 8GB RAM is required.
 
 The following shell script can be used to quickly get started with a Pelias build.
 
-Feel free to modify the code and data locations to suit your needs.
-
 ```bash
 #!/bin/bash
 set -x
 
-# create directories
-mkdir /code /data
+# change directory to the where you would like to install Pelias
+# cd /path/to/install
 
-# set proper permissions. make sure the user matches your `DOCKER_USER` setting in `.env`
-chown 1000:1000 /code /data
-
-# clone repo
-cd /code
-git clone https://github.com/pelias/docker.git
-cd docker
+# clone this repository
+git clone https://github.com/pelias/docker.git && cd docker
 
 # install pelias script
 ln -s "$(pwd)/pelias" /usr/local/bin/pelias
 
-# cwd
+# cd into the project directory
 cd projects/portland-metro
 
-# configure environment
+# create a directory to store Pelias data files
+# see: https://github.com/pelias/docker#variable-data_dir
+# note: use 'gsed' instead of 'sed' on a Mac
+mkdir ./data
 sed -i '/DATA_DIR/d' .env
-echo 'DATA_DIR=/data' >> .env
+echo 'DATA_DIR=./data' >> .env
+
+# configure docker to write files as your local user
+# see: https://github.com/pelias/docker#variable-docker_user
+# note: use 'gsed' instead of 'sed' on a Mac
+sed -i '/DOCKER_USER/d' .env
+echo "DOCKER_USER=$(id -u)" >> .env
 
 # run build
 pelias compose pull
@@ -72,7 +102,6 @@ pelias compose up
 pelias test run
 ```
 
-
 ## Installing the Pelias helper script
 
 This repository makes use of a helper script to make basic management of the Pelias Docker images easy.
@@ -84,8 +113,14 @@ You can find the `pelias` file in the root of this repository.
 Advanced users may have a preference how this is done on their system, but a basic example would be to do something like:
 
 ```bash
-git clone https://github.com/pelias/docker.git ~/pelias
-ln -s ~/pelias/pelias /usr/local/bin/pelias
+# change directory to the where you would like to install Pelias
+# cd /path/to/install
+
+# clone this repository
+git clone https://github.com/pelias/docker.git && cd docker
+
+# install pelias script
+ln -s "$(pwd)/pelias" /usr/local/bin/pelias
 ```
 
 Once the command is correctly installed you should be able to run the following command to confirm the pelias command is available on your path:

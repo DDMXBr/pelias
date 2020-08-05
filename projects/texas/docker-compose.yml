@@ -14,6 +14,8 @@ services:
     container_name: pelias_schema
     user: "${DOCKER_USER}"
     volumes:
+      - "./synonyms/custom_name.txt:/code/pelias/schema/synonyms/custom_name.txt"
+      - "./synonyms/custom_street.txt:/code/pelias/schema/synonyms/custom_street.txt"
       - "./pelias.json:/code/pelias.json"
   api:
     image: pelias/api:master
@@ -54,22 +56,6 @@ services:
   openaddresses:
     image: pelias/openaddresses:master
     container_name: pelias_openaddresses
-    user: "${DOCKER_USER}"
-    volumes:
-      - "./pelias.json:/code/pelias.json"
-      - "${DATA_DIR}:/data"
-      - "./blacklist/:/data/blacklist"
-  geonames:
-    image: pelias/geonames:master
-    container_name: pelias_geonames
-    user: "${DOCKER_USER}"
-    volumes:
-      - "./pelias.json:/code/pelias.json"
-      - "${DATA_DIR}:/data"
-      - "./blacklist/:/data/blacklist"
-  csv-importer:
-    image: pelias/csv-importer:master
-    container_name: pelias_csv_importer
     user: "${DOCKER_USER}"
     volumes:
       - "./pelias.json:/code/pelias.json"
